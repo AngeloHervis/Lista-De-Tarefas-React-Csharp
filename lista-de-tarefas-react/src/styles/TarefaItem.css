@@ -1,0 +1,43 @@
+div {
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+div h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+div p {
+  margin: 5px 0;
+  color: #555;
+}
+
+div label {
+  display: flex;
+  align-items: center;
+}
+
+div label input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+div button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+div button:hover {
+  background-color: #e60000;
+}
