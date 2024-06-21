@@ -5,7 +5,7 @@ export const TarefaContext = createContext();
 const TarefaContextProvider = (props) => {
   const [tarefas, setTarefas] = useState([]);
 
-  const addTarefa = (tarefa) => {
+  const adicionarTarefa = (tarefa) => {
     tarefa.id = Date.now();
     setTarefas([...tarefas, tarefa]);
   };
@@ -13,6 +13,14 @@ const TarefaContextProvider = (props) => {
   const removerTarefa = (id) => {
     setTarefas(tarefas.filter((tarefa) => tarefa.id !== id));
   };
+
+  const editarTarefa = (tarefaEditada) => {
+    const novasTarefas = tarefas.map((tarefa) =>
+      tarefa.id === tarefaEditada.id ? { ...tarefaEditada } : tarefa
+    );
+    setTarefas(novasTarefas);
+  };
+
 
   const toggleStatus = (id) => {
     setTarefas(
@@ -24,7 +32,7 @@ const TarefaContextProvider = (props) => {
 
   return (
     <TarefaContext.Provider
-      value={{ tarefas, addTarefa, removerTarefa, toggleStatus }}
+      value={{ tarefas, adicionarTarefa, removerTarefa, editarTarefa, toggleStatus }}
     >
       {props.children}
     </TarefaContext.Provider>

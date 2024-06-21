@@ -3,7 +3,7 @@ import { TarefaContext } from "../context/TarefaContext";
 import "../styles/TarefaForm.css";
 
 const TarefaForm = () => {
-  const { addTarefa } = useContext(TarefaContext);
+  const { adicionarTarefa } = useContext(TarefaContext);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataVencimento, setDataVencimento] = useState("");
@@ -12,7 +12,7 @@ const TarefaForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const tarefa = { titulo, descricao, dataVencimento, status };
-    addTarefa(tarefa);
+    adicionarTarefa(tarefa);
     setTitulo('');
     setDescricao('');
     setDataVencimento('');
