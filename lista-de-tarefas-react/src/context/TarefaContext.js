@@ -4,38 +4,38 @@ export const TarefaContext = createContext();
 
 const TarefaContextProvider = (props) => {
   const [tarefas, setTarefas] = useState([]);
-  const [usuarioAutenticado, setUsuarioAutenticado] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
   const adicionarTarefa = (tarefa) => {
-    if (usuarioAutenticado) {
+    if (usuarioLogado) {
       tarefa.id = Date.now();
       setTarefas([...tarefas, tarefa]);
     } else {
-      console.log("Usuário não autenticado. Não é possível adicionar tarefa.");
+      console.log("Usuário não Logado. Não é possível adicionar tarefa.");
     }
   };
 
   const removerTarefa = (id) => {
-    if (usuarioAutenticado) {
+    if (usuarioLogado) {
       setTarefas(tarefas.filter((tarefa) => tarefa.id !== id));
     } else {
-      console.log("Usuário não autenticado. Não é possível remover tarefa.");
+      console.log("Usuário não Logado. Não é possível remover tarefa.");
     }
   };
 
   const editarTarefa = (tarefaEditada) => {
-    if (usuarioAutenticado) {
+    if (usuarioLogado) {
       const novasTarefas = tarefas.map((tarefa) =>
         tarefa.id === tarefaEditada.id ? { ...tarefaEditada } : tarefa
       );
       setTarefas(novasTarefas);
     } else {
-      console.log("Usuário não autenticado. Não é possível editar tarefa.");
+      console.log("Usuário não Logado. Não é possível editar tarefa.");
     }
   };
 
   const toggleStatus = (id) => {
-    if (usuarioAutenticado) {
+    if (usuarioLogado) {
       setTarefas(
         tarefas.map((tarefa) =>
           tarefa.id === id ? { ...tarefa, status: !tarefa.status } : tarefa
@@ -43,18 +43,26 @@ const TarefaContextProvider = (props) => {
       );
     } else {
       console.log(
-        "Usuário não autenticado. Não é possível alterar status da tarefa."
+        "Usuário não Logado. Não é possível alterar status da tarefa."
       );
     }
   };
 
   const realizarLogin = async (credenciais) => {
     try {
-      // Chamar API para realizar o login
-      // Exemplo: const response = await fetch('http://localhost:5000/login', {...});
+      const response = await fetch("http://localhost:5272/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credenciais),
+      });
 
-      // Simular login bem-sucedido (usuário fictício)
-      setUsuarioAutenticado(true);
+      if (response.ok) {
+        setUsuarioLogado(true);
+      } else {
+        throw new Error("Credenciais inválidas. Por favor, tente novamente.");
+      }
     } catch (error) {
       console.error("Erro ao realizar login:", error);
       throw new Error("Credenciais inválidas. Por favor, tente novamente.");
@@ -62,7 +70,7 @@ const TarefaContextProvider = (props) => {
   };
 
   const realizarLogout = () => {
-    setUsuarioAutenticado(false);
+    setUsuarioLogado(false);
     setTarefas([]);
   };
 
@@ -76,7 +84,8 @@ const TarefaContextProvider = (props) => {
         toggleStatus,
         realizarLogin,
         realizarLogout,
-        usuarioAutenticado,
+        usuarioLogado,
+        setUsuarioLogado
       }}
     >
       {props.children}

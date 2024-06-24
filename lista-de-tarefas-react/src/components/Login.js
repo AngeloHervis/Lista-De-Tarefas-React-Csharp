@@ -1,10 +1,10 @@
 import React from "react";
-import {useHistory} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import {login} from "../services/api";
 import "../styles/Login.css";
 
 const Login = () => {
-    const history = useHistory();
+    const history = Navigate();
     const [email, setEmail] = React.useState("");
     const [senha, setSenha] = React.useState("");
     const [erro, setErro] = React.useState("");

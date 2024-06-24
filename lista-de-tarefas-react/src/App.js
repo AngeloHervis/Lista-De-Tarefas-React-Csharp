@@ -1,9 +1,8 @@
-// src/App.jsimport React, { useContext } from "react";
+import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
+  Routes,
+  Navigate,
 } from "react-router-dom";
 import Header from "./components/Header";
 import TarefaList from "./components/TarefaList";
@@ -24,23 +23,23 @@ function App() {
         <div className="App">
           <Header />
           <main>
-            <Switch>
+            <Routes>
               <PrivateRoute exact path="/tarefas" component={TarefaList} />
               <PrivateRoute
                 exact
                 path="/adicionar-tarefa"
                 component={TarefaForm}
               />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/cadastro" component={CadastroUsuario} />
-              <Route exact path="/">
+              <Router exact path="/login" component={Login} />
+              <Router exact path="/cadastro" component={CadastroUsuario} />
+              <Router exact path="/">
                 {usuarioLogado ? (
-                  <Redirect to="/tarefas" />
+                  <Navigate to="/tarefas" />
                 ) : (
-                  <Redirect to="/login" />
+                  <Navigate to="/login" />
                 )}
-              </Route>
-            </Switch>
+              </Router>
+            </Routes>
           </main>
           <Footer />
         </div>
