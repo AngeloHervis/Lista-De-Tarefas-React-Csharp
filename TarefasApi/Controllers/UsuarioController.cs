@@ -6,53 +6,56 @@ namespace TarefasApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsuarioController : ControllerBase{
-    private readonly TarefaContext _context;
-
-    public UsuarioController(TarefaContext context){
+public class UsuarioController : ControllerBase
+{
+    private readonly AppDbContext _context;
+    
+    public UsuarioController(AppDbContext context)
+    {
         _context = context;
     }
-
+    
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios(){
+    public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+    {
         return await _context.Usuarios.ToListAsync();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Usuario>> GetUsuario(Guid id){
+    public async Task<ActionResult<Usuario>> GetUsuario(string id)
+    {
         var usuario = await _context.Usuarios.FindAsync(id);
 
-        if (usuario == null){
+        if (usuario == null)
+        {
             return NotFound();
         }
 
         return usuario;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario){
-        _context.Usuarios.Add(usuario);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
-    }
-
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutUsuario(Guid id, Usuario usuario){
-        if (id != usuario.Id){
+    public async Task<IActionResult> PutUsuario(string id, Usuario usuario)
+    {
+        if (id != usuario.Id)
+        {
             return BadRequest();
         }
 
         _context.Entry(usuario).State = EntityState.Modified;
 
-        try{
+        try
+        {
             await _context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException){
-            if (!UsuarioExists(id)){
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!UsuarioExists(id))
+            {
                 return NotFound();
             }
-            else{
+            else
+            {
                 throw;
             }
         }
@@ -60,11 +63,23 @@ public class UsuarioController : ControllerBase{
         return NoContent();
     }
 
+    [HttpPost]
+    public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+    {
+        _context.Usuarios.Add(usuario);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+    }
+
+
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUsuario(Guid id){
+    public async Task<IActionResult> DeleteUsuario(string id)
+    {
         var usuario = await _context.Usuarios.FindAsync(id);
 
-        if (usuario == null){
+        if (usuario == null)
+        {
             return NotFound();
         }
 
@@ -74,7 +89,8 @@ public class UsuarioController : ControllerBase{
         return NoContent();
     }
 
-    private bool UsuarioExists(Guid id){
+    private bool UsuarioExists(string id)
+    {
         return _context.Usuarios.Any(e => e.Id == id);
     }
 }

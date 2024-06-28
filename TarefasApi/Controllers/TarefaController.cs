@@ -6,23 +6,22 @@ namespace TarefasApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class TarefasController : ControllerBase
+public class TarefaController : ControllerBase
 {
-    private readonly TarefaContext _context;
-
-    public TarefasController(TarefaContext context)
+    private readonly AppDbContext _context;
+    
+    public TarefaController(AppDbContext context)
     {
         _context = context;
     }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Tarefa>>> GetTarefas()
     {
         return await _context.Tarefas.ToListAsync();
     }
 
-    [HttpGet]
-    public async Task<ActionResult<Tarefa>> GetTarefa(Guid id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Tarefa>> GetTarefa(string id)
     {
         var tarefa = await _context.Tarefas.FindAsync(id);
 
@@ -34,19 +33,10 @@ public class TarefasController : ControllerBase
         return tarefa;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Tarefa>> PostTarefa(Tarefa tarefa)
-    {
-        _context.Tarefas.Add(tarefa);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetTarefa), new { id = tarefa.Id }, tarefa);
-    }
-
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTarefa(Guid id, Tarefa tarefa)
+    public async Task<IActionResult> PutTarefa(string id, Tarefa tarefa)
     {
-        if (id != tarefa.Id)
+        if (id != tarefa.TarefaId)
         {
             return BadRequest();
         }
@@ -68,11 +58,21 @@ public class TarefasController : ControllerBase
                 throw;
             }
         }
+
         return NoContent();
     }
 
+    [HttpPost]
+    public async Task<ActionResult<Tarefa>> PostTarefa(Tarefa tarefa)
+    {
+        _context.Tarefas.Add(tarefa);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction("GetTarefa", new { id = tarefa.TarefaId }, tarefa);
+    }
+
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTarefa(Guid id)
+    public async Task<IActionResult> DeleteTarefa(string id)
     {
         var tarefa = await _context.Tarefas.FindAsync(id);
         if (tarefa == null)
@@ -86,8 +86,8 @@ public class TarefasController : ControllerBase
         return NoContent();
     }
 
-    private bool TarefaExists(Guid id)
+    private bool TarefaExists(string id)
     {
-        return _context.Tarefas.Any(e => e.Id == id);
+        return _context.Tarefas.Any(e => e.TarefaId == id);
     }
 }

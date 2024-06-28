@@ -9,7 +9,7 @@ using TarefasApi.Models;
 
 namespace TarefasApi.Migrations
 {
-    [DbContext(typeof(TarefaContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class TarefaContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

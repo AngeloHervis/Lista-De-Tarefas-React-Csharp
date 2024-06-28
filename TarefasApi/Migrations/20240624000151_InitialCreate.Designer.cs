@@ -10,7 +10,7 @@ using TarefasApi.Models;
 
 namespace TarefasApi.Migrations
 {
-    [DbContext(typeof(TarefaContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20240624000151_InitialCreate")]
     partial class InitialCreate
     {
