@@ -2,7 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TarefasApi.Models;
 
-public class Tarefa{
+public class Tarefa
+{
     [Key]
     public string TarefaId { get; set; } = Guid.NewGuid().ToString();
     public string UsuarioId { get; }
